@@ -17,14 +17,14 @@ NORM_MINE_LIST = [
     # 矿
     _MinePoint(3, r'resources/mine/norm_purple_shade_mine.png'),
     _MinePoint(3, r'resources/mine/norm_purple_mine.png'),
-    _MinePoint(5, r'resources/mine/norm_blue_mine.png'),
+    _MinePoint(5, r'resources/mine/blue_mine.png'),
     _MinePoint(5, r'resources/mine/norm_blue_shade_mine.png'),
 
     _MinePoint(7, r'resources/mine/norm_green_mine.png'),
     # MinePoint(7, r'resources/mine/norm_green_shade_mine.png'),
 
-    # MinePoint(10, r'resources/mine/norm_grey_mine.png'),
-    # MinePoint(10, r'resources/mine/norm_grey_shade_mine.png')
+    _MinePoint(10, r'resources/mine/norm_grey_mine.png'),
+    _MinePoint(10, r'resources/mine/norm_grey_shade_mine.png')
     # 采集
     # _MinePoint(8, r'resources/mine/norm_cao.png', 20),
 ]
@@ -162,7 +162,7 @@ class Mine:
     # 所有定义站立点
     _standPoints = (
         _FstStandPoint(
-            -9, 10.5, map="huaguo", cooldown=4
+            -10, 9.5, map="huaguo", cooldown=4
         ),
         _NormStandPoint(
             12.5, 9, cooldown=5
@@ -219,6 +219,16 @@ class Mine:
         self._lastMineTime = datetime.datetime.now().timestamp()
 
     def _mining(self, mineList=None):
+        def waitMining():
+            collect = pyautogui.locateCenterOnScreen(r'resources/mine/cai_kuang_zhong.png',  # collect_caiji
+                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                     confidence=0.8)
+            while collect is not None:
+                cooldown(1)
+                collect = pyautogui.locateCenterOnScreen(r'resources/mine/cai_kuang_zhong.png',  # collect_caiji
+                                                         region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                         confidence=0.8)
+
         def waitMoveOk():
             mineSelect = pyautogui.locateCenterOnScreen(r'resources/mine/mine_select.png',
                                                         region=(frame.left, frame.top, frame.right, frame.bottom),
@@ -259,7 +269,8 @@ class Mine:
                         # 点击挖
                         self._lastMineTime = datetime.datetime.now().timestamp()
                         Util.leftClick(-5, -3.5)
-                        cooldown(4)
+                        # cooldown(mine.wait)
+                        waitMining()
                         # 验证码的出现规则目前是每一天时间出现一次，可以先手动挖一两轮再挂
                         yanzhen = Util.locateCenterOnScreen(r'resources/mine/yanzhen.png')
                         if yanzhen is not None:
@@ -302,6 +313,8 @@ class Mine:
             else:
                 notChange = True
             cooldown(2)
+            # 如果有广告弹窗，则关闭
+            closePopupWindow()
             # 30 分钟没挖到矿 跳出循环
             if datetime.datetime.now().timestamp() - self._lastMineTime > 60 * 11:
                 self.mark = False
@@ -309,7 +322,7 @@ class Mine:
 
 # 大窗口
 if __name__ == '__main__':
-    time.sleep(2)
+    time.sleep(0.2)
     print("start task....")
     Mine().mineMain()
     # 挖完矿关机

@@ -42,6 +42,30 @@ frameSizeCm = [28.1, 21.8]
 # 是否发生跨天
 _newDayClick = False
 
+# 分辨率路由
+route = ''
+
+class _Teammate:
+    _type = 1
+    _pic = 2
+
+    def __init__(self, _type, _pic):
+        self._type = _type
+        self._pic = _pic
+
+# 助战图标配置
+TEAMMATE_LIST = [
+    # 物理输出
+    _Teammate(1, r'resources/ghost/wuLi.png'),
+    # 法术输出
+    _Teammate(2, r'resources/ghost/faShu.png'),
+    # 治疗
+    _Teammate(3, r'resources/ghost/zhiLiao.png'),
+    # 封印
+    _Teammate(4, r'resources/ghost/fengYin.png'),
+    # 辅助
+    _Teammate(5, r'resources/ghost/fuZhu.png')
+]
 # relativeSize = lambda x, y: (frameSize[0] * x / frameSizeCm[0],
 #                              frameSize[1] * y / frameSizeCm[1])
 # relativeX2Act = lambda xcm: frameSize[0] * xcm / frameSizeCm[0]
@@ -102,6 +126,7 @@ def closeMission():
     Util.leftClick(-7, 4.3)
     # print("关闭任务侧边栏")
     # pyautogui.hotkey('alt', 'p')
+
 
 # 结束战斗后进行操作
 def escapeBattleDo(do, battleingPic=r'resources/small/enter_battle_flag.png', battleDoFunc=None):
@@ -223,7 +248,13 @@ class Util:
         # pyautogui.typewrite(text)
         pyperclip.copy(text)
         # print(pyperclip.paste())
-        pyautogui.hotkey('Ctrl', 'v')
+        # pyautogui.hotkey('Ctrl', 'v')
+        pyautogui.keyDown('Ctrl')
+        pyautogui.keyDown('v')
+        pyautogui.keyUp('Ctrl')
+        pyautogui.keyUp('v')
+        pyautogui.keyDown('enter')
+        pyautogui.keyUp('enter')
 
     @staticmethod
     def ocr(region, type=None):
@@ -249,6 +280,7 @@ def resize2Nice(windows):
     pyautogui.dragTo(windows.left + (niceSize[0] - resizeOffset[0]), windows.top + (niceSize[1] - resizeOffset[1]),
                      duration=1.3)
 
+
 def newDayCloseCheck(do):
     global _newDayClick
     if datetime.datetime.now().hour == 0 and (not _newDayClick):
@@ -258,6 +290,7 @@ def newDayCloseCheck(do):
         do(newDay)
         return True
     return False
+
 
 def init(idx=0, resizeToNice=False):
     global frameSizeCm
@@ -304,7 +337,9 @@ def init(idx=0, resizeToNice=False):
     print("窗口四角位置:", frame)
     try:
         windows.activate()
+        print('窗口激活成功！')
     except PyGetWindowException:
+        print('窗口激活失败！')
         pass
 
 
@@ -319,6 +354,7 @@ def parse_request(request):
             request.update({item[0].lstrip(' '): item[1].lstrip(' ')})
     return request
 
+
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime.datetime):
@@ -326,8 +362,67 @@ class DateEncoder(json.JSONEncoder):
         else:
             return json.JSONEncoder.default(self, obj)
 
+
 def __avgShoujueNum(n=4):
     last = 0
     for i in range(n - 1, -1, -1):
         last = n / (n - i) + last
     return last
+
+
+# 关闭各种弹窗广告任务（可扩展）
+# 广告图列表
+NORM_ADVERT_LIST = [
+    # “X” 符号
+    r'resources/common/big_delete.png',
+    r'resources/common/delete.png',
+    r'resources/common/red_delete.png',
+    r'resources/ghost/team_delete.png',
+    r'resources/ghost/delete_discount.png',
+    # “取消” 符号
+    r'resources/ghost/cancel.png',
+    r'resources/ghost/cancel2.png'
+]
+
+
+def closePopupWindow():
+    advertList = NORM_ADVERT_LIST
+    count = 0
+    while count < len(advertList):
+        for advert in advertList:
+            point = pyautogui.locateCenterOnScreen(advert,
+                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                   confidence=0.9)
+            if point is not None:
+                print("发现弹窗广告：", advert)
+                # 点击叉掉
+                pyautogui.leftClick(point.x, point.y)
+            count += 1
+
+
+# 通用方法，找到元素则点击(必须点击)
+def clickIconPic(pic, wait):
+    t = datetime.datetime.now().timestamp()
+    flag = True
+    while flag:
+        create_team = pyautogui.locateCenterOnScreen(pic,  # collect_caiji
+                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                     confidence=0.9)
+        if create_team is not None:
+            pyautogui.leftClick(create_team.x, create_team.y)
+            flag = False
+        cooldown(1)
+        t2 = datetime.datetime.now().timestamp()
+        # 指定时间内还没点击到则跳出循环
+        if t2 - t > wait:
+            flag = False
+            return True
+
+# 通用方法，找到元素则点击(有则点击)
+def clickIconPicIfExist(pic):
+    create_team = pyautogui.locateCenterOnScreen(pic,  # collect_caiji
+                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                 confidence=0.9)
+    print("点击-" + str(pic) + "-位置：", create_team)
+    if create_team is not None:
+        pyautogui.leftClick(create_team.x, create_team.y)

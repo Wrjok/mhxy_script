@@ -10,6 +10,9 @@ from pyautogui import FailSafeException
 from mhxy import *
 
 
+
+
+
 class Ghost:
     maxRound = 99
     # 程序运行标志
@@ -29,6 +32,7 @@ class Ghost:
     def __init__(self, idx=0) -> None:
         conn = ConfigParser()
         file_path = os.path.join(os.path.abspath('.'), 'resources/ghost/ghost.ini')
+        print(file_path)
         if not os.path.exists(file_path):
             raise FileNotFoundError("文件不存在")
         conn.read(file_path)
@@ -180,6 +184,224 @@ class Ghost:
                 naozhong.start()
             cooldown(2)
 
+    def moveToZhongkui(self):
+        # 打开大地图
+        posBigMap = (frame.left + relativeX2Act(1),
+                     frame.top + relativeY2Act(2))
+        print("click bigMap", posBigMap)
+        pyautogui.leftClick(posBigMap[0],
+                            posBigMap[1])
+        # 选择长安城
+        # 点击长安城
+        collect = pyautogui.locateCenterOnScreen(r'resources/common/chang_an_cheng.png',  # collect_caiji
+                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                 confidence=0.9)
+        if collect is not None:
+            pyautogui.leftClick(collect.x, collect.y)
+
+        cooldown(0.5)
+        # 打开小地图
+        posSmallMap = (frame.left + relativeX2Act(3.5),
+                       frame.top + relativeY2Act(2))
+        pyautogui.leftClick(posSmallMap[0],
+                            posSmallMap[1])
+        # 点击钟馗
+        cooldown(0.5)
+        zhongkui = pyautogui.locateCenterOnScreen(r'resources/ghost/zhong_kui.png',  # collect_caiji
+                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                  confidence=0.9)
+        if zhongkui is not None:
+            pyautogui.leftClick(zhongkui.x, zhongkui.y)
+            cooldown(8)
+
+    # 一键喊话（帮派，当前频道）
+    def yijianhanhua(self):
+        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
+                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                  confidence=0.9)
+        if position is not None:
+            pyautogui.leftClick(position.x, position.y)
+            position = pyautogui.locateCenterOnScreen(r'resources/ghost/bangpai_channel.png',  # collect_caiji
+                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                      confidence=0.9)
+            if position is not None:
+                pyautogui.leftClick(position.x, position.y)
+
+        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
+                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                  confidence=0.9)
+        if position is not None:
+            pyautogui.leftClick(position.x, position.y)
+            position = pyautogui.locateCenterOnScreen(r'resources/ghost/current_channel.png',  # collect_caiji
+                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                      confidence=0.9)
+            if position is not None:
+                pyautogui.leftClick(position.x, position.y)
+        cooldown(23)
+
+    # 打开队伍面板，检查是否有离线队友
+    def checkLixian(self):
+        # 检查是否有离线队友
+        lixianCount = 0
+        while lixianCount < 4:
+            liXian = pyautogui.locateCenterOnScreen(r'resources/ghost/liXian.png',  # collect_caiji
+                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                    confidence=0.9)
+            if liXian is not None:
+                pyautogui.leftClick(liXian.x, liXian.y)
+                deleteTeam = pyautogui.locateCenterOnScreen(r'resources/ghost/deleteTeam.png',  # collect_caiji
+                                                            region=(
+                                                                frame.left, frame.top, frame.right, frame.bottom),
+                                                            confidence=0.9)
+                if deleteTeam is not None:
+                    pyautogui.leftClick(deleteTeam.x, deleteTeam.y)
+            lixianCount += 1
+
+    def checkAddTeam(self):
+        t = datetime.datetime.now().timestamp()
+        hanHua = True
+        while hanHua:
+            cooldown(1)
+            teamPanel = Util.locateCenterOnScreen(r'resources/fuben/' + '' + 'duiwumianban.png')
+            if teamPanel is None:
+                return True
+            print("检查是否有离线队友")
+            # 检查是否有离线队友
+            self.checkLixian()
+            clickIconPicIfExist(r'resources/ghost/auto_find.png')
+            # 如果队伍不足4人，开始喊话
+            count = 0
+            for teamMate in TEAMMATE_LIST:
+                print(teamMate._pic)
+                position = pyautogui.locateAllOnScreen(teamMate._pic,  # collect_caiji
+                                                       region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                       confidence=0.9)
+                if position is not None:
+                    count += len(list(position))
+            print(count)
+            # 第一次组队可能不会出现助战的情况，做兼容性处理
+            team4 = pyautogui.locateCenterOnScreen(r'resources/ghost/team4.png',  # collect_caiji
+                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                   confidence=0.9)
+            team5 = pyautogui.locateCenterOnScreen(r'resources/ghost/team5.png',  # collect_caiji
+                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                   confidence=0.9)
+            if count > 1 or (team4 is None and team5 is None):
+                self.yijianhanhua()
+            else:
+                hanHua = False
+            t2 = datetime.datetime.now().timestamp()
+            # 如果喊话超过5分钟，跳出循环
+            if t2-t > 60*5:
+                hanHua = False
+                return True
+
+    def checkIfFinishTask(self, wait=0):
+        judgeCount = 0
+        check_flag = True
+        while check_flag:
+            # 每分钟检查一次
+            cooldown(wait)
+            print('----开始检查队友和任务是否完成------wait:', wait)
+            closePopupWindow()
+            auto_battle2 = pyautogui.locateCenterOnScreen(r'resources/ghost/battleFlag2.png',  # collect_caiji
+                                                          region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                          confidence=0.9)
+            if auto_battle2 is not None:
+                clickIconPicIfExist(r'resources/ghost/battleFlag.png')
+                clickIconPicIfExist(r'resources/ghost/team.png')
+                self.checkLixian()
+                clickIconPicIfExist(r'resources/ghost/auto_find.png')
+                closePopupWindow()
+                # 关掉菜单栏
+                clickIconPicIfExist(r'resources/ghost/closeMenu.png')
+            else:
+                print('auto_battle2:', auto_battle2)
+                startGhost = pyautogui.locateCenterOnScreen(r'resources/ghost/startGhost.png',  # collect_caiji
+                                                            region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                            confidence=0.9)
+                if startGhost is None:
+                    # 抓完一轮鬼，跳出循环
+                    print("跳出循环")
+                    judgeCount += 1
+                    check_flag = False
+                else:
+                    print("检查是否进入战斗")
+                    cooldown(10)
+                    closePopupWindow()
+                    # 检查是否进入战斗
+                    enter_battle = pyautogui.locateCenterOnScreen(r'resources/ghost/battleFlag2.png',
+                                                                  # collect_caiji
+                                                                  region=(
+                                                                  frame.left, frame.top, frame.right, frame.bottom),
+                                                                  confidence=0.9)
+                    if enter_battle is None:
+                        # 打开大地图
+                        posBigMap = (frame.left + relativeX2Act(1),
+                                     frame.top + relativeY2Act(2))
+                        print("click bigMap:检查是否进入战斗", posBigMap)
+                        pyautogui.leftClick(posBigMap[0],
+                                            posBigMap[1])
+                        # 选择长安城
+                        # 点击长安城
+                        collect = pyautogui.locateCenterOnScreen(r'resources/common/chang_an_cheng.png',
+                                                                 # collect_caiji
+                                                                 region=(
+                                                                     frame.left, frame.top, frame.right,
+                                                                     frame.bottom),
+                                                                 confidence=0.9)
+                        if collect is not None:
+                            pyautogui.leftClick(collect.x, collect.y)
+                        cooldown(0.5)
+                        # 打开队伍面板
+                        Util.doubleClick(-1.5, 4)
+                        self.checkAddTeam()
+                        closePopupWindow()
+                        cooldown(0.5)
+                        Util.leftClick(-4.4, 4)
+                        clickIconPicIfExist(r'resources/ghost/startGhost.png')
+
+    def ghostNew(self):
+        while True:
+            # 任务开始前关闭弹窗广告
+            closePopupWindow()
+
+            # self.checkIfFinishTask(60)
+
+            # 移动位置到长安城钟馗
+            self.moveToZhongkui()
+
+            # 开始组队
+            clickIconPicIfExist(r'resources/ghost/create_team.png')
+
+            zhongkui = pyautogui.locateCenterOnScreen(r'resources/ghost/create_team_success.png',  # collect_caiji
+                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                      confidence=0.9)
+            if zhongkui is not None:
+                pyautogui.leftClick(zhongkui.x, zhongkui.y)
+                # 自动匹配
+                clickIconPicIfExist(r'resources/ghost/auto_find.png')
+            else:
+                # 已有队伍，直接确定
+                clickIconPicIfExist(r'resources/ghost/confirm.png')
+
+            result = self.checkAddTeam()
+
+            # 队伍人数组满后，开始领任务
+            closePopupWindow()
+            self.moveToZhongkui()
+
+            print("点击捉鬼任务按钮")
+            clickIconPicIfExist(r'resources/ghost/zhuogui_renwu.png')
+
+            # 点击任务栏开始抓鬼
+            closePopupWindow()
+            clickIconPicIfExist(r'resources/ghost/zk_dialog.png')
+            clickIconPicIfExist(r'resources/ghost/startGhost.png')
+            clickIconPicIfExist(r'resources/ghost/startGhost.png')
+
+            self.checkIfFinishTask(60)
+
 
 # 小窗口 pyinstaller -F mhxy_ghost.py
 if __name__ == '__main__':
@@ -187,6 +409,6 @@ if __name__ == '__main__':
     pyautogui.PAUSE = 1  # 调用在执行动作后暂停的秒数，只能在执行一些pyautogui动作后才能使用，建议用time.sleep
     pyautogui.FAILSAFE = True  # 启用自动防故障功能，左上角的坐标为（0，0），将鼠标移到屏幕的左上角，来抛出failSafeException异常
     try:
-        Ghost(idx=idx).ghost()
+        Ghost(idx=idx).ghostNew()
     except (FailSafeException):
         pl.playsound('resources/common/music.mp3')
