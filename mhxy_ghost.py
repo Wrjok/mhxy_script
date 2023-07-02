@@ -361,8 +361,14 @@ class Ghost:
                         Util.leftClick(-4.4, 4)
                         clickIconPicIfExist(r'resources/ghost/startGhost.png')
 
-    def ghostNew(self):
+    # source:0=无限抓鬼，1=一条龙抓鬼
+    def ghostNew(self, source):
+        t = datetime.datetime.now().timestamp()
         while True:
+            t2 = datetime.datetime.now().timestamp()
+            if source == 1 and t2-t > 60*30:
+                break
+
             # 任务开始前关闭弹窗广告
             closePopupWindow()
 
@@ -401,6 +407,7 @@ class Ghost:
             clickIconPicIfExist(r'resources/ghost/startGhost.png')
 
             self.checkIfFinishTask(60)
+        print("-----抓鬼任务已完成--------")
 
 
 # 小窗口 pyinstaller -F mhxy_ghost.py
@@ -409,6 +416,6 @@ if __name__ == '__main__':
     pyautogui.PAUSE = 1  # 调用在执行动作后暂停的秒数，只能在执行一些pyautogui动作后才能使用，建议用time.sleep
     pyautogui.FAILSAFE = True  # 启用自动防故障功能，左上角的坐标为（0，0），将鼠标移到屏幕的左上角，来抛出failSafeException异常
     try:
-        Ghost(idx=idx).ghostNew()
+        Ghost(idx=idx).ghostNew(0)
     except (FailSafeException):
         pl.playsound('resources/common/music.mp3')

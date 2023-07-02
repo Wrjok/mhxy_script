@@ -45,6 +45,7 @@ _newDayClick = False
 # 分辨率路由
 route = ''
 
+
 class _Teammate:
     _type = 1
     _pic = 2
@@ -52,6 +53,7 @@ class _Teammate:
     def __init__(self, _type, _pic):
         self._type = _type
         self._pic = _pic
+
 
 # 助战图标配置
 TEAMMATE_LIST = [
@@ -66,6 +68,8 @@ TEAMMATE_LIST = [
     # 辅助
     _Teammate(5, r'resources/ghost/fuZhu.png')
 ]
+
+
 # relativeSize = lambda x, y: (frameSize[0] * x / frameSizeCm[0],
 #                              frameSize[1] * y / frameSizeCm[1])
 # relativeX2Act = lambda xcm: frameSize[0] * xcm / frameSizeCm[0]
@@ -339,7 +343,7 @@ def init(idx=0, resizeToNice=False):
         windows.activate()
         print('窗口激活成功！')
     except PyGetWindowException:
-        print('窗口激活失败！')
+        print('窗口激活失败！', PyGetWindowException)
         pass
 
 
@@ -379,6 +383,10 @@ NORM_ADVERT_LIST = [
     r'resources/common/red_delete.png',
     r'resources/ghost/team_delete.png',
     r'resources/ghost/delete_discount.png',
+    r'resources/ghost/delete_bigmap.png',
+    r'resources/ghost/delete_white.png',
+    r'resources/ghost/delete_reDian.png',
+    r'resources/ghost/delete_remind.png',
     # “取消” 符号
     r'resources/ghost/cancel.png',
     r'resources/ghost/cancel2.png'
@@ -388,7 +396,7 @@ NORM_ADVERT_LIST = [
 def closePopupWindow():
     advertList = NORM_ADVERT_LIST
     count = 0
-    while count < len(advertList):
+    while count < 5:
         for advert in advertList:
             point = pyautogui.locateCenterOnScreen(advert,
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
@@ -418,11 +426,25 @@ def clickIconPic(pic, wait):
             flag = False
             return True
 
+
 # 通用方法，找到元素则点击(有则点击)
 def clickIconPicIfExist(pic):
+    cooldown(0.5)
     create_team = pyautogui.locateCenterOnScreen(pic,  # collect_caiji
                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
                                                  confidence=0.9)
     print("点击-" + str(pic) + "-位置：", create_team)
     if create_team is not None:
         pyautogui.leftClick(create_team.x, create_team.y)
+
+
+def clickIconPicByCount(pic, sleep, maxCount):
+    count = 0
+    while count < maxCount:
+        count += 1
+        cooldown(sleep)
+        create_team = pyautogui.locateCenterOnScreen(pic,  # collect_caiji
+                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                     confidence=0.9)
+        if create_team is not None:
+            pyautogui.leftClick(create_team.x, create_team.y)
