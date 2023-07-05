@@ -272,13 +272,12 @@ class Ghost:
             # 如果队伍不足4人，开始喊话
             count = 0
             for teamMate in TEAMMATE_LIST:
-                print(teamMate._pic)
                 position = pyautogui.locateAllOnScreen(teamMate._pic,  # collect_caiji
                                                        region=(frame.left, frame.top, frame.right, frame.bottom),
                                                        confidence=0.9)
                 if position is not None:
                     count += len(list(position))
-            print(count)
+            print('队伍助战数量：', count)
             # 第一次组队可能不会出现助战的情况，做兼容性处理
             team4 = pyautogui.locateCenterOnScreen(r'resources/ghost/team4.png',  # collect_caiji
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),

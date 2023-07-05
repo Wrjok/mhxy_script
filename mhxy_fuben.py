@@ -193,13 +193,12 @@ class Fuben:
             # 如果队伍不足5人，开始喊话
             count = 0
             for teamMate in TEAMMATE_LIST:
-                print(teamMate._pic)
                 position = pyautogui.locateAllOnScreen(teamMate._pic,  # collect_caiji
                                                        region=(frame.left, frame.top, frame.right, frame.bottom),
                                                        confidence=0.9)
                 if position is not None:
                     count += len(list(position))
-            print(count)
+            print('队伍助战数量：', count)
             # 第一次组队可能不会出现助战的情况，做兼容性处理
             team5 = pyautogui.locateCenterOnScreen(r'resources/ghost/team5.png',  # collect_caiji
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
@@ -301,8 +300,9 @@ class Fuben:
                         #         pyautogui.leftClick()
                         #     else:
                         #         break
-                        clickIconPicByCount(r'resources/fuben/' + route + 'continue_juqing.png', 0.2, 5)
-                        clickIconPic(r'resources/fuben/' + route + 'fubenBattle.png', 7)
+                        ret = clickIconPic(r'resources/fuben/' + route + 'fubenBattle.png', 7)
+                        if ret:
+                            clickIconPicByCount(r'resources/fuben/' + route + 'continue_juqing.png', 0.4, 5)
                 cooldown(10)
 
 

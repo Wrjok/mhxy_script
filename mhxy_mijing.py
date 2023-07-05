@@ -34,7 +34,7 @@ class Mijing:
             cooldown(8)
 
     def mijing(self, levelType):
-        print('-----开始秘境流程-----')
+        print('-----开始秘境流程，levelType：-----', levelType)
         closePopupWindow()
         self.moveToYunLeYou()
         clickIconPicIfExist(r'resources/mijing/' + route + 'getMijingTask.png')
@@ -47,6 +47,7 @@ class Mijing:
             cooldown(0.5)
             clickIconPicIfExist(r'resources/mijing/' + route + 'confirmMijing.png')
 
+        cooldown(2)
         # 点击第一个怪开始任务(相对位置)(勇武，精锐位置不同，需要区分)
         if levelType == 0:
             Util.leftClick(5.7, 10.7)

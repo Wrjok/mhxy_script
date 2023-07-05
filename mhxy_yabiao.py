@@ -31,7 +31,7 @@ class Yabiao:
         position = Util.locateCenterOnScreen(r'resources/yabiao/' + route + 'biaotou.png')
         if position is not None:
             pyautogui.leftClick(position.x, position.y)
-            cooldown(10)
+            cooldown(12)
 
     def yabiao(self):
         print('-----开始押镖流程-----')
