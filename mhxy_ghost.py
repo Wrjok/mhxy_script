@@ -216,27 +216,10 @@ class Ghost:
 
     # 一键喊话（帮派，当前频道）
     def yijianhanhua(self):
-        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
-                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                  confidence=0.9)
-        if position is not None:
-            pyautogui.leftClick(position.x, position.y)
-            position = pyautogui.locateCenterOnScreen(r'resources/ghost/bangpai_channel.png',  # collect_caiji
-                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                      confidence=0.9)
-            if position is not None:
-                pyautogui.leftClick(position.x, position.y)
-
-        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
-                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                  confidence=0.9)
-        if position is not None:
-            pyautogui.leftClick(position.x, position.y)
-            position = pyautogui.locateCenterOnScreen(r'resources/ghost/current_channel.png',  # collect_caiji
-                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                      confidence=0.9)
-            if position is not None:
-                pyautogui.leftClick(position.x, position.y)
+        clickIconPicIfExist(r'resources/ghost/han_hua.png')
+        clickIconPicIfExist(r'resources/ghost/bangpai_channel.png')
+        clickIconPicIfExist(r'resources/ghost/han_hua.png')
+        clickIconPicIfExist(r'resources/ghost/current_channel.png')
         cooldown(23)
 
     # 打开队伍面板，检查是否有离线队友
@@ -244,11 +227,13 @@ class Ghost:
         # 检查是否有离线队友
         lixianCount = 0
         while lixianCount < 4:
+            cooldown(0.5)
             liXian = pyautogui.locateCenterOnScreen(r'resources/ghost/liXian.png',  # collect_caiji
                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
                                                     confidence=0.9)
             if liXian is not None:
                 pyautogui.leftClick(liXian.x, liXian.y)
+                cooldown(0.5)
                 deleteTeam = pyautogui.locateCenterOnScreen(r'resources/ghost/deleteTeam.png',  # collect_caiji
                                                             region=(
                                                                 frame.left, frame.top, frame.right, frame.bottom),
