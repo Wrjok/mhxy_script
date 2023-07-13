@@ -413,11 +413,20 @@ def clickIconPic(pic, wait):
     t = datetime.datetime.now().timestamp()
     flag = True
     while flag:
-        create_team = pyautogui.locateCenterOnScreen(pic,  # collect_caiji
-                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                     confidence=0.9)
-        if create_team is not None:
-            pyautogui.leftClick(create_team.x, create_team.y)
+        position = None
+        if isinstance(pic, list):
+            for i in pic:
+                position = pyautogui.locateCenterOnScreen(i,
+                                                          region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                          confidence=0.9)
+                if position is not None:
+                    break
+        else:
+            position = pyautogui.locateCenterOnScreen(pic,
+                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
+                                                      confidence=0.9)
+        if position is not None:
+            pyautogui.leftClick(position.x, position.y)
             flag = False
         cooldown(1)
         t2 = datetime.datetime.now().timestamp()
@@ -436,6 +445,8 @@ def clickIconPicIfExist(pic):
     print("点击-" + str(pic) + "-位置：", create_team)
     if create_team is not None:
         pyautogui.leftClick(create_team.x, create_team.y)
+        return True
+    return False
 
 
 def clickIconPicByCount(pic, sleep, maxCount):

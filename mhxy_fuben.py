@@ -267,7 +267,6 @@ class Fuben:
             pyautogui.leftClick(enter.left, enter.top)
             cooldown(2)
 
-            checkError = True  # 错误未检查
             checkFlag = True
             while checkFlag:
                 closePopupWindow()
@@ -283,13 +282,10 @@ class Fuben:
                         clickIconPicIfExist(r'resources/fuben/' + route + 'task_black.png')
                     cooldown(1)
                     result = clickIconPic(r'resources/ghost/' + route + 'startGhost.png', 5)
-                    if result and checkError:
-                        checkError = False
-                        continue
-                    elif result and not checkError:
+                    if result:
                         print("当前副本已完成")
-                        checkFlag = False
                         count += 1
+                        break
                     else:
                         # fubenBattleCount = 0
                         # while fubenBattleCount < 5:
@@ -300,7 +296,8 @@ class Fuben:
                         #         pyautogui.leftClick()
                         #     else:
                         #         break
-                        ret = clickIconPic(r'resources/fuben/' + route + 'fubenBattle.png', 7)
+                        battle_list = [r'resources/fuben/' + route + 'fubenBattle1.png', r'resources/fuben/' + route + 'fubenBattle2.png']
+                        ret = clickIconPic(battle_list, 7)
                         if ret:
                             clickIconPicByCount(r'resources/fuben/' + route + 'continue_juqing.png', 0.4, 5)
                 cooldown(10)

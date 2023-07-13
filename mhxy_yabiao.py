@@ -51,13 +51,16 @@ class Yabiao:
                 closePopupWindow()
                 battleFlag = Util.locateCenterOnScreen(r'resources/ghost/' + route + 'battleFlag2.png')
                 # 押镖中
-                yabiaozhong = Util.locateCenterOnScreen(r'resources/ghost/' + route + 'startGhost.png')
+                yabiaozhong = Util.locateCenterOnScreen(r'resources/yabiao/' + route + 'yabiaozhong.png')
+                cooldown(0.5)
+                yabiao_mark = Util.locateCenterOnScreen(r'resources/yabiao/' + route + 'yabiao_mark.png')
                 # 押镖按钮
                 yabiaoButton = Util.locateCenterOnScreen(r'resources/yabiao/' + route + 'normalYabiao.png')
                 print('battleFlag:', battleFlag)
                 print('yabiaozhong:', yabiaozhong)
+                print('yabiao_mark:', yabiao_mark)
                 print('yabiaoButton:', yabiaoButton)
-                if battleFlag is None and yabiaozhong is None:
+                if battleFlag is None and yabiaozhong is None and yabiao_mark is None:
                     if yabiaoButton is not None:
                         pyautogui.leftClick(yabiaoButton.x, yabiaoButton.y)
                         cooldown(0.5)

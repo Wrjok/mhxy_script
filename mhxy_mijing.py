@@ -62,7 +62,7 @@ class Mijing:
             cooldown(7)
             print("开始检查秘境任务是否完成------")
             closePopupWindow()
-            clickIconPicIfExist(r'resources/fuben/' + route + 'enterFuben.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle2.png')
 
             # 追踪任务之前检查是否战斗失败，失败一次结束任务
             battleFail = Util.locateCenterOnScreen(r'resources/mijing/' + route + 'battleFail.png')

@@ -1,3 +1,5 @@
+import pyautogui
+
 from mhxy import *
 import time
 def parse_request(request):
@@ -12,15 +14,21 @@ def parse_request(request):
     return request
 
 if __name__ == '__main__':
+    list1 = [1, 2]
+    print(isinstance(list1, list))
+    # input_out = input("你好：")
+    pyautogui.PAUSE = 1
     # 坐标校准
     init()
     time.sleep(3)
     # Util.doubleClick(-4.4, 4)
-    baixiaoxianzi = pyautogui.locateCenterOnScreen(r'resources/mijing/' + route + '21_guan.png',
+    baixiaoxianzi = pyautogui.locateCenterOnScreen(r'resources/taskLink/' + route + 'jingyanlian.png',
                                                    # collect_caiji
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                   confidence=0.9)
+                                                   confidence=0.8)
     print(baixiaoxianzi)
+    # pyautogui.leftClick(baixiaoxianzi.x, baixiaoxianzi.y)
+    Util.leftClick(17.2, -11.6)
     x, y = pyautogui.position()
     positionStr = '鼠标坐标点（X,Y）为：{},{}'.format(str(x).rjust(4), str(y).rjust(4))
     print(positionStr)
