@@ -1,4 +1,4 @@
-from mhxy import *
+from mhxy_renwulian import *
 
 
 class _MissionType:
@@ -37,6 +37,7 @@ class _Wupin(_MissionType):
                 pyautogui.leftClick(locate.x, locate.y)
         else:
             pyautogui.leftClick(locate.x, locate.y)
+
 
 class _Battle(_MissionType):
     def __init__(self) -> None:
@@ -110,10 +111,56 @@ class Bangpai:
             self._mayMissionList[idx].complete(locate, itemIdx=itemIdx)
             cooldown(1)
 
+    def do_bang_pai(self):
+        closePopupWindow()
+        print('--------开始帮派任务-----------')
+        clickIconPicIfExist(r'resources/bangpai/' + route + 'plus.png')
+        clickIconPicIfExist(r'resources/bangpai/' + route + 'bangpai.PNG')
+        cooldown(0.5)
+        Util.leftClick(-1.9, -5.5)
+        cooldown(0.5)
+        Util.leftClick(5.6, -4.4)
+        clickIconPicIfExist(r'resources/bangpai/' + route + 'qianwang.PNG')
+        clickIconPic(r'resources/bangpai/' + route + 'lingqu.PNG', 3)
+
+        t = datetime.datetime.now().timestamp()
+        while True:
+            cooldown(1)
+            closePopupWindow()
+            pic = [r'resources/bangpai/' + route + 'qinglong.PNG', r'resources/bangpai/' + route + 'qinglong.PNG',
+                   r'resources/bangpai/' + route + 'zhuque.PNG', r'resources/bangpai/' + route + 'xuanwu.PNG']
+            create_team = Util.locateCenterOnScreen(pic, 0.8)
+            print('点击帮派任务栏位置：', create_team)
+            if create_team is not None:
+                pyautogui.leftClick(create_team.x, create_team.y)
+                t = datetime.datetime.now().timestamp()
+            clickIconPicIfExist(r'resources/bangpai/' + route + 'renwu.PNG')
+            clickIconPicIfExist(r'resources/bangpai/' + route + 'use.PNG')
+            clickIconPicIfExist(r'resources/bangpai/' + route + 'qiechuo.PNG')
+            clickIconPicIfExist(r'resources/bangpai/' + route + 'buy_baobao.png')
+            clickIconPicIfExist(r'resources/bangpai/' + route + 'jiao_baobao.png')
+            t2 = datetime.datetime.now().timestamp()
+            # 超过三分钟没有检测到任务，停止循环
+            if t2 - t > 60 * 3:
+                print('停止帮派任务')
+                break
+        print('------帮派任务结束--------')
+
 
 # 大窗口
 if __name__ == '__main__':
     pyautogui.PAUSE = 0.5
+    input_out = input('1帮派，2任务链，3全部，请选择：')
+    print("请在5秒内激活窗口")
+    time.sleep(5)
+    task_type = int(input_out)
     print("start task....")
     init()
-    Bangpai().do((winRelativeX(-0.5), winRelativeY(6 + 0)))
+    if task_type == 1:
+        Bangpai().do_bang_pai()
+    elif task_type == 2:
+        TaskLink().taskLink()
+    else:
+        Bangpai().do_bang_pai()
+        TaskLink().taskLink()
+

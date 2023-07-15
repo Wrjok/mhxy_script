@@ -213,13 +213,13 @@ def cooldown(second):
 
 class Util:
     @staticmethod
-    def locateCenterOnScreen(pic):
+    def locateCenterOnScreen(pic, same=0.9):
         if isinstance(pic, list):
             res = None
             for i in pic:
                 res = pyautogui.locateCenterOnScreen(i,
                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                     confidence=0.9)
+                                                     confidence=same)
                 if res is not None:
                     return res
             return res
@@ -227,7 +227,7 @@ class Util:
             # pyautogui.locateOnWindow 只能有一个标题所以不可取
             return pyautogui.locateCenterOnScreen(pic,
                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                  confidence=0.9)
+                                                  confidence=same)
 
     @staticmethod
     def locateOnScreen(pic):

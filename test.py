@@ -28,7 +28,7 @@ if __name__ == '__main__':
                                                    confidence=0.8)
     print(baixiaoxianzi)
     # pyautogui.leftClick(baixiaoxianzi.x, baixiaoxianzi.y)
-    Util.leftClick(17.2, -11.6)
+    # Util.leftClick(17.2, -11.6)
     x, y = pyautogui.position()
     positionStr = '鼠标坐标点（X,Y）为：{},{}'.format(str(x).rjust(4), str(y).rjust(4))
     print(positionStr)
