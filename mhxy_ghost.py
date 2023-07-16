@@ -301,6 +301,11 @@ class Ghost:
                 clickIconPicIfExist(r'resources/ghost/closeMenu.png')
             else:
                 print('auto_battle2:', auto_battle2)
+                cooldown(0.5)
+                blood = Util.locateCenterOnScreen(r'resources/fuben/' + route + 'blood.png')
+                if blood is not None:
+                    clickIconPicIfExist(r'resources/fuben/' + route + 'task_black.png')
+                cooldown(0.5)
                 startGhost = pyautogui.locateCenterOnScreen(r'resources/ghost/startGhost.png',  # collect_caiji
                                                             region=(frame.left, frame.top, frame.right, frame.bottom),
                                                             confidence=0.9)
