@@ -124,11 +124,7 @@ class Fuben:
         cooldown(0.5)
         # 选择长安城
         # 点击长安城
-        collect = pyautogui.locateCenterOnScreen(r'resources/common/chang_an_cheng.png',  # collect_caiji
-                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                 confidence=0.9)
-        if collect is not None:
-            pyautogui.leftClick(collect.x, collect.y)
+        Util.leftClick(13.4, 12.4)
 
         cooldown(0.5)
         # 打开小地图
@@ -300,6 +296,7 @@ class Fuben:
                         ret = clickIconPic(battle_list, 7)
                         if ret:
                             clickIconPicByCount(r'resources/fuben/' + route + 'continue_juqing.png', 0.4, 5)
+                            clickIconPic(battle_list, 2)
                 cooldown(10)
 
 

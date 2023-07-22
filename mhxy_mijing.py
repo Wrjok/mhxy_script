@@ -14,11 +14,7 @@ class Mijing:
         cooldown(0.5)
         # 选择东海湾
         # 点击东海湾
-        collect = pyautogui.locateCenterOnScreen(r'resources/mijing/'+route+'eastHaiwan.png',  # collect_caiji
-                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                 confidence=0.9)
-        if collect is not None:
-            pyautogui.leftClick(collect.x, collect.y)
+        Util.leftClick(-5.8, -9)
 
         cooldown(0.5)
         # 打开小地图
