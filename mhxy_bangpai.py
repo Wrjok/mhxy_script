@@ -122,6 +122,7 @@ class Bangpai:
         Util.leftClick(5.6, -4.4)
         clickIconPicIfExist(r'resources/bangpai/' + route + 'qianwang.PNG')
         clickIconPic(r'resources/bangpai/' + route + 'lingqu.PNG', 3)
+        clickIconPicIfExist(r'resources/bangpai/' + route + 'huzi.PNG')
 
         t = datetime.datetime.now().timestamp()
         while True:

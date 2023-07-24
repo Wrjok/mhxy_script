@@ -404,6 +404,7 @@ def closePopupWindow():
             if point is not None:
                 print("发现弹窗广告：", advert)
                 # 点击叉掉
+                pyautogui.PAUSE = 0.5
                 pyautogui.leftClick(point.x, point.y)
             count += 1
 

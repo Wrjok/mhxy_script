@@ -75,8 +75,8 @@ class Mijing:
 # 大窗口
 if __name__ == '__main__':
     input_out = input("角色等级？0：89，1：69。请输入：")
-    print("请手动激活窗口（5秒内）")
-    time.sleep(5)
+    print("请手动激活窗口（10秒内）")
+    time.sleep(10)
     print("start task....")
     init()
     Mijing().mijing(int(input_out))
