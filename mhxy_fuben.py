@@ -305,8 +305,8 @@ if __name__ == '__main__':
     input_out = input("角色等级？0：89，1：69。请输入：")
     # # pyautogui.PAUSE = 1
     levelType = int(input_out)
-    print("请手动激活窗口（10秒内）")
-    time.sleep(10)
+    print("请手动激活窗口（5秒内）")
+    time.sleep(5)
     print("start task....")
     Fuben().fuben(1)
     print("end task(fuben)....start task(ghost)")

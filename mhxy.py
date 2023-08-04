@@ -221,6 +221,7 @@ class Util:
                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
                                                      confidence=same)
                 if res is not None:
+                    print('图片名称', i)
                     return res
             return res
         else:

@@ -1,8 +1,33 @@
 from mhxy import *
 
+value_goods_list = [
+    r'resources/tasklink/valuegoods/baitan_fenhen.png',
+    r'resources/tasklink/valuegoods/baitan_huixin.png',
+    r'resources/tasklink/valuegoods/baitan_huyou.png',
+    r'resources/tasklink/valuegoods/baitan_jianjia.png',
+    r'resources/tasklink/valuegoods/baitan_jiaojian.png',
+    r'resources/tasklink/valuegoods/baitan_jiaoke.png',
+    r'resources/tasklink/valuegoods/baitan_juci.png',
+    r'resources/tasklink/valuegoods/baitan_kanpo.png',
+    r'resources/tasklink/valuegoods/baitan_lianhuan.png',
+    r'resources/tasklink/valuegoods/baitan_liaoran.png',
+    r'resources/tasklink/valuegoods/baitan_lingshen.png',
+    r'resources/tasklink/valuegoods/baitan_qixi.png',
+    r'resources/tasklink/valuegoods/baitan_shanzou.png',
+    r'resources/tasklink/valuegoods/baitan_shengjie.png',
+    r'resources/tasklink/valuegoods/baitan_shunshi.png',
+    r'resources/tasklink/valuegoods/baitan_wuwei.png',
+    r'resources/tasklink/valuegoods/baitan_yinshang.png',
+    r'resources/tasklink/valuegoods/baitan_yufa.png',
+    r'resources/tasklink/valuegoods/baitan_ziran.png',
+    r'resources/tasklink/valuegoods/jinlan_baitan.png',
+    r'resources/tasklink/valuegoods/meigui_baitan.png',
+    r'resources/tasklink/valuegoods/shoujue_baitan.png'
+]
+
 
 class TaskLink:
-
+    is_buy = False  # 遇传说物品默认不买
     def moveToLuXiaoRan(self):
         # 打开大地图
         cooldown(0.5)
@@ -33,6 +58,49 @@ class TaskLink:
             pyautogui.leftClick(position.x, position.y)
             cooldown(10)
 
+    # 智能传说流程
+    def smart_legend(self):
+        cooldown(1)
+        # 点击挂机位置
+        Util.leftClick(12.4, 1.6)
+        cooldown(0.5)
+        Util.leftClick(12.4, 1.6)
+        cooldown(0.5)
+        # 点击推荐地图开始挂机
+        Util.leftClick(10.8, 9.9)
+
+        t = datetime.datetime.now().timestamp()  # 传说流程起始时间，超过20分钟结束任务
+        t2 = datetime.datetime.now().timestamp()  # 自动挂机起始时间，超过20分钟结束任务
+        while True:
+            cooldown(10)
+            print('-------开始检查传说任务--------')
+            jiao_baobao = Util.locateCenterOnScreen(r'resources/tasklink/' + route + 'jiao_baobao.png')
+            if jiao_baobao is not None:
+                pyautogui.leftClick(jiao_baobao.x, jiao_baobao.y)
+                print('-------上交物品，传说流程结束--------')
+                break
+            else:
+                closePopupWindow()
+
+            auto_battle = Util.locateCenterOnScreen(r'resources/ghost/' + route + 'battleFlag2.png')
+            if auto_battle is not None:
+                t2 = datetime.datetime.now().timestamp()
+
+            # 当前时间
+            now = datetime.datetime.now().timestamp()
+            if now - t > 60 * 20:
+                print('-------超过20分钟，传说流程结束--------')
+                self.is_buy = True
+                break
+            if now - t2 > 60 * 2:
+                print('-------超过2分钟，自动进入战斗--------')
+                cooldown(0.5)
+                # 点击挂机位置
+                Util.leftClick(12.4, 1.6)
+                cooldown(0.5)
+                # 点击推荐地图开始挂机
+                Util.leftClick(10.8, 9.9)
+
     def taskLink(self):
         print('------开始经验任务链--------')
         closePopupWindow()
@@ -58,6 +126,16 @@ class TaskLink:
                 t = datetime.datetime.now().timestamp()
             clickIconPicIfExist(r'resources/tasklink/' + route + 'getTaskLink.png')
             clickIconPicIfExist(r'resources/tasklink/' + route + 'battle.png')
+            # 判断是否需要进入传说
+            pos = Util.locateCenterOnScreen(value_goods_list)
+            print('传说物品位置：', pos)
+            if pos is not None:
+                if not self.is_buy:
+                    print('-------检测到物品开始传说任务--------')
+                    closePopupWindow()
+                    self.smart_legend()
+                else:
+                    self.is_buy = False
             clickIconPicIfExist(r'resources/tasklink/' + route + 'buy_baobao.png')
             clickIconPicIfExist(r'resources/tasklink/' + route + 'jiao_baobao.png')
             t2 = datetime.datetime.now().timestamp()
