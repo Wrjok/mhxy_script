@@ -129,11 +129,14 @@ class TaskLink:
             # 判断是否需要进入传说
             pos = Util.locateCenterOnScreen(value_goods_list)
             print('传说物品位置：', pos)
-            if pos is not None:
+            cooldown(0.5)
+            jiao_baobao = Util.locateCenterOnScreen(r'resources/tasklink/' + route + 'jiao_baobao.png')
+            if pos is not None and jiao_baobao is None:
                 if not self.is_buy:
                     print('-------检测到物品开始传说任务--------')
                     closePopupWindow()
                     self.smart_legend()
+                    t = datetime.datetime.now().timestamp()
                 else:
                     self.is_buy = False
             clickIconPicIfExist(r'resources/tasklink/' + route + 'buy_baobao.png')

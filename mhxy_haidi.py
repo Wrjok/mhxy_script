@@ -1,20 +1,22 @@
 from mhxy import *
 
+
 class Haidi:
 
     def haidi(self, chaseWin):
         # 流程任务 领取任务后起点
-        def do():
-            def reach():
-                return pyautogui.locateCenterOnScreen(r'resources/haidi/select.png')
-            pyautogui.leftClick(chaseWin[0], chaseWin[1])
-            pyautogui.leftClick(chaseWin[0], chaseWin[1])
-            reachPos = reach()
-            while reachPos is None:
-                reachPos = reach()
-                cooldown(1)
-            pyautogui.leftClick(reachPos.x, reachPos.y)
-        escapeBattleDo(do)
+        print('-------开始召唤灵任务--------')
+        t = datetime.datetime.now().timestamp()
+        while True:
+            cooldown(3)
+            clickIconPicIfExist(r'resources/ghost/' + route + 'startGhost.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle1.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle2.png')
+            t2 = datetime.datetime.now().timestamp()
+            if t2 - t > 60 * 42:
+                break
+        print('-------结束召唤灵任务--------')
+
 
 # 副本 进入第一个副本为起点
 if __name__ == '__main__':
@@ -22,4 +24,3 @@ if __name__ == '__main__':
     print("start task....")
     init()
     Haidi().haidi((winRelativeX(-3), winRelativeY(6)))
-
