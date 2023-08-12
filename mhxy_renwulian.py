@@ -22,6 +22,7 @@ value_goods_list = [
     r'resources/tasklink/valuegoods/baitan_ziran.png',
     r'resources/tasklink/valuegoods/jinlan_baitan.png',
     r'resources/tasklink/valuegoods/meigui_baitan.png',
+    r'resources/tasklink/valuegoods/baitan_kuanglu.png',
     r'resources/tasklink/valuegoods/shoujue_baitan.png'
 ]
 
@@ -74,6 +75,7 @@ class TaskLink:
         while True:
             cooldown(10)
             print('-------开始检查传说任务--------')
+            clickIconPicIfExist(r'resources/tasklink/' + route + 'getTaskLink.png')
             jiao_baobao = Util.locateCenterOnScreen(r'resources/tasklink/' + route + 'jiao_baobao.png')
             if jiao_baobao is not None:
                 pyautogui.leftClick(jiao_baobao.x, jiao_baobao.y)
