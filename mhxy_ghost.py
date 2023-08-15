@@ -351,7 +351,7 @@ class Ghost:
         t = datetime.datetime.now().timestamp()
         while True:
             t2 = datetime.datetime.now().timestamp()
-            if source == 1 and t2-t > 60*20:
+            if source == 1 and t2-t > 60*25:
                 break
 
             # 任务开始前关闭弹窗广告

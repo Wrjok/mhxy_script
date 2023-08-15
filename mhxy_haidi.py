@@ -8,7 +8,7 @@ class Haidi:
         print('-------开始召唤灵任务--------')
         t = datetime.datetime.now().timestamp()
         while True:
-            cooldown(3)
+            cooldown(1)
             clickIconPicIfExist(r'resources/ghost/' + route + 'startGhost.png')
             clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle1.png')
             clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle2.png')

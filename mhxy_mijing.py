@@ -53,6 +53,7 @@ class Mijing:
         clickIconPicIfExist(r'resources/mijing/' + route + 'battleAgain.png')
         cooldown(1)
 
+        t = datetime.datetime.now().timestamp()
         # 开始检查秘境任务是否做完
         while True:
             cooldown(7)
@@ -69,14 +70,18 @@ class Mijing:
             # 点击追踪任务(相对位置)
             Util.leftClick(-1, 9)
 
+            t2 = datetime.datetime.now().timestamp()
+            # 超过35分钟后停止任务
+            if t2 - t > 60*35:
+                break
         print("------秘境任务已完成------")
 
 
 # 大窗口
 if __name__ == '__main__':
     input_out = input("角色等级？0：89，1：69。请输入：")
-    print("请手动激活窗口（10秒内）")
-    time.sleep(10)
+    print("请手动激活窗口（5秒内）")
+    time.sleep(5)
     print("start task....")
     init()
     Mijing().mijing(int(input_out))
