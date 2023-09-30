@@ -9,9 +9,15 @@ class Haidi:
         t = datetime.datetime.now().timestamp()
         while True:
             cooldown(1)
+            clickIconPicIfExist(r'resources/haidi/' + route + 'chuangguan.png')
+            clickIconPicIfExist(r'resources/haidi/' + route + 'lingqu.png')
+
             clickIconPicIfExist(r'resources/ghost/' + route + 'startGhost.png')
-            clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle1.png')
-            clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle2.png')
+            listTask = [r'resources/haidi/' + route + 'chuangguan.png', r'resources/haidi/' + route + 'lingqu.png']
+            position = Util.locateCenterOnScreen(listTask)
+            if position is None:
+                clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle1.png')
+                clickIconPicIfExist(r'resources/fuben/' + route + 'fubenBattle2.png')
             t2 = datetime.datetime.now().timestamp()
             if t2 - t > 60 * 42:
                 break

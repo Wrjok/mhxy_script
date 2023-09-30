@@ -70,6 +70,7 @@ class Baotu:
 
     def baotu(self):
         # 开始挖宝图
+        closePopupWindow()
         # 打开队伍面板(如果有队伍先退出)
         Util.doubleClick(-1.5, 4)
         cooldown(0.5)

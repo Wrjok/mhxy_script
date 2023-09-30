@@ -31,6 +31,11 @@ class Fuben:
         ("norm", 13, 15),
         ("norm", 7, 15)
     ]
+    battle_flag_list = [
+        r'resources/ghost/' + route + 'battleFlag2.png',
+        r'resources/fuben/' + route + 'battle_juqing.png',
+        r'resources/fuben/' + route + 'battle_juqing2.png'
+    ]
     config = {
         'lastFuben': r'resources/small/fuben_flag.png'
     }
@@ -267,7 +272,7 @@ class Fuben:
             while checkFlag:
                 closePopupWindow()
                 print("开始检查副本任务是否进入战斗")
-                battle_flag = Util.locateCenterOnScreen(r'resources/ghost/' + route + 'battleFlag2.png')
+                battle_flag = Util.locateCenterOnScreen(self.battle_flag_list)
                 if battle_flag is None:
                     clickIconPic(r'resources/fuben/' + route + 'jump.png', 5)
                     cooldown(2)

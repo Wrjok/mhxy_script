@@ -2,14 +2,16 @@ from mhxy import *
 
 
 class Hanhua:
-    def hanhua(self):
+    def hanhua(self, content):
         while True:
-            Util.leftClick(9, 2)
-            Util.leftClick(3.5, 11.5)
-            # 第二个 14 第一个 x 9
-            Util.leftClick(9, 12)
-            Util.leftClick(11, 2)
-            cooldown(4)
+            # 开始喊话
+            clickIconPicIfExist(r'resources/fuben/hanhua.png')
+            clickIconPicIfExist(r'resources/fuben/currentSelect.png')
+            clickIconPicIfExist(r'resources/fuben/currentUnSelect.png')
+            Util.write(content)
+            clickIconPicIfExist(r'resources/fuben/agreeButton.png')
+            clickIconPicIfExist(r'resources/fuben/closeDialog.png')
+            cooldown(5)
 
     def hanhuaWithText(self):
         cooldown(3)
@@ -25,7 +27,9 @@ class Hanhua:
 
 # 喊话
 if __name__ == '__main__':
-    Util.PAUSE = 0.2
+    input_out = input("喊话内容。请输入：")
+    print("请手动激活窗口（5秒内）")
+    time.sleep(5)
     print("start task....")
-    init(resizeToNice=False)
-    Hanhua().hanhua()
+    init()
+    Hanhua().hanhua(input_out)
