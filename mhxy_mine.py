@@ -85,11 +85,13 @@ class _FstStandPoint(_StandPoint):
         Util.leftClick(posMap[0], posMap[1])
         # self.newDayCloseDiag()
         # 打开小地图
+        cooldown(0.5)
         posSmallMap = (frame.left + relativeX2Act(3.5),
                        frame.top + relativeY2Act(2))
         pyautogui.leftClick(posSmallMap[0],
                             posSmallMap[1])
         # 选择右上部分的点
+        cooldown(1)
         posMove = winRelativeXY(self.relativeX, self.relativeY)
         pyautogui.leftClick(posMove[0],
                             posMove[1])
@@ -148,6 +150,7 @@ class _NormStandPoint(_StandPoint):
         pyautogui.leftClick(posSmallMap[0],
                             posSmallMap[1])
         # 选择右上部分随意点
+        cooldown(0.5)
         posMove = winRelativeXY(self.relativeX, self.relativeY)
         pyautogui.leftClick(posMove[0],
                             posMove[1])
@@ -162,7 +165,7 @@ class Mine:
     # 所有定义站立点
     _standPoints = (
         _FstStandPoint(
-            -10, 9.5, map="huaguo", cooldown=4
+            -10, 10, map="huaguo", cooldown=4
         ),
         _NormStandPoint(
             12.5, 9, cooldown=5
@@ -294,6 +297,7 @@ class Mine:
     def mineMain(self):
         mapPos = 0
         standPoint = self._changeMapPos(mapPos)
+        print('开始----------------------')
         # 没有改变过位置
         notChange = True
         while self.mark:
