@@ -1,7 +1,9 @@
 # from mhxy import *
-import pyautogui
 
+from mhxy_baotu import *
 from mhxy_ghost import *
+from mhxy_yabiao import *
+from mhxy_mijing import *
 
 class _FubenTask:
     _x = 1
@@ -15,7 +17,8 @@ class _FubenTask:
 
 
 FubenTask_count = 5
-
+# 等级类型，0=89,1=69
+levelType = 0
 
 class Fuben:
     xiashi_fix = 5.6 + 0
@@ -27,6 +30,11 @@ class Fuben:
         ("norm", 19, 15),
         ("norm", 13, 15),
         ("norm", 7, 15)
+    ]
+    battle_flag_list = [
+        r'resources/ghost/' + route + 'battleFlag2.png',
+        r'resources/fuben/' + route + 'battle_juqing.png',
+        r'resources/fuben/' + route + 'battle_juqing2.png'
     ]
     config = {
         'lastFuben': r'resources/small/fuben_flag.png'
@@ -121,11 +129,7 @@ class Fuben:
         cooldown(0.5)
         # 选择长安城
         # 点击长安城
-        collect = pyautogui.locateCenterOnScreen(r'resources/common/chang_an_cheng.png',  # collect_caiji
-                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                 confidence=0.9)
-        if collect is not None:
-            pyautogui.leftClick(collect.x, collect.y)
+        Util.leftClick(13.4, 12.4)
 
         cooldown(0.5)
         # 打开小地图
@@ -170,7 +174,10 @@ class Fuben:
             clickIconPicIfExist(r'resources/fuben/hanhua.png')
             clickIconPicIfExist(r'resources/fuben/currentSelect.png')
             clickIconPicIfExist(r'resources/fuben/currentUnSelect.png')
-            Util.write("勇武三本+20鬼速度来人勇武三本+20鬼速度来人勇武三本+20鬼速度来人")
+            if levelType == 0:
+                Util.write("勇武三本+20鬼速度来稳定勇武三本+20鬼速度来稳定勇武三本+20鬼速度来稳定")
+            elif levelType == 1:
+                Util.write("双本+20鬼速度来稳定双本+20鬼速度来稳定双本+20鬼速度来稳定")
             clickIconPicIfExist(r'resources/fuben/agreeButton.png')
             clickIconPicIfExist(r'resources/fuben/closeDialog.png')
             cooldown(10)
@@ -184,26 +191,22 @@ class Fuben:
             print("检查是否有离线队友")
             # 检查是否有离线队友
             self.checkLixian()
-            # 如果队伍不足4人，开始喊话
+            # 如果队伍不足5人，开始喊话
             count = 0
             for teamMate in TEAMMATE_LIST:
-                print(teamMate._pic)
                 position = pyautogui.locateAllOnScreen(teamMate._pic,  # collect_caiji
                                                        region=(frame.left, frame.top, frame.right, frame.bottom),
                                                        confidence=0.9)
                 if position is not None:
                     count += len(list(position))
-            print(count)
+            print('队伍助战数量：', count)
             # 第一次组队可能不会出现助战的情况，做兼容性处理
-            team4 = pyautogui.locateCenterOnScreen(r'resources/ghost/team4.png',  # collect_caiji
-                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                   confidence=0.9)
             team5 = pyautogui.locateCenterOnScreen(r'resources/ghost/team5.png',  # collect_caiji
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
                                                    confidence=0.9)
-            if count > 1 or (team4 is None and team5 is None):
+            if count > 0 or team5 is None:
                 # self.yijianhanhua()
-                print("队伍不足4人，继续喊话")
+                print("队伍不足5人，继续喊话")
             else:
                 hanHua = False
             t2 = datetime.datetime.now().timestamp()
@@ -237,6 +240,7 @@ class Fuben:
                     clickIconPicIfExist(r'resources/ghost/auto_find.png')
                 else:
                     # 已有队伍，直接确定
+                    cooldown(1)
                     clickIconPicIfExist(r'resources/fuben/normal.png')
                     clickIconPicIfExist(r'resources/ghost/confirm.png')
 
@@ -264,24 +268,25 @@ class Fuben:
             pyautogui.leftClick(enter.left, enter.top)
             cooldown(2)
 
-            checkError = True  # 错误未检查
             checkFlag = True
             while checkFlag:
                 closePopupWindow()
                 print("开始检查副本任务是否进入战斗")
-                battle_flag = Util.locateCenterOnScreen(r'resources/ghost/' + route + 'battleFlag2.png')
+                battle_flag = Util.locateCenterOnScreen(self.battle_flag_list)
                 if battle_flag is None:
-                    clickIconPic(r'resources/fuben/' + route + 'jump.png', 7)
+                    clickIconPic(r'resources/fuben/' + route + 'jump.png', 5)
                     cooldown(2)
                     clickIconPicIfExist(r'resources/fuben/' + route + 'clickPingmu.png')
-                    result = clickIconPic(r'resources/ghost/' + route + 'startGhost.png', 7)
-                    if result and checkError:
-                        checkError = False
-                        continue
-                    elif result and not checkError:
+                    cooldown(1)
+                    blood = Util.locateCenterOnScreen(r'resources/fuben/' + route + 'blood.png')
+                    if blood is not None:
+                        clickIconPicIfExist(r'resources/fuben/' + route + 'task_black.png')
+                    cooldown(1)
+                    result = clickIconPic(r'resources/ghost/' + route + 'startGhost.png', 5)
+                    if result:
                         print("当前副本已完成")
-                        checkFlag = False
                         count += 1
+                        break
                     else:
                         # fubenBattleCount = 0
                         # while fubenBattleCount < 5:
@@ -292,15 +297,26 @@ class Fuben:
                         #         pyautogui.leftClick()
                         #     else:
                         #         break
-                        clickIconPic(r'resources/fuben/' + route + 'fubenBattle.png', 7)
+                        battle_list = [r'resources/fuben/' + route + 'fubenBattle1.png', r'resources/fuben/' + route + 'fubenBattle2.png']
+                        ret = clickIconPic(battle_list, 7)
+                        if ret:
+                            clickIconPicByCount(r'resources/fuben/' + route + 'continue_juqing.png', 0.4, 5)
+                            clickIconPic(battle_list, 2)
                 cooldown(10)
 
 
 # 副本 进入第一个副本为起点 小窗口
 if __name__ == '__main__':
-    pyautogui.PAUSE = 0.2
-    # input_out = input("从哪一个副本开始？1：是第一个，2：是第二个，3：是第三个。请输入：")
+    input_out = input("角色等级？0：89，1：69。请输入：")
+    # # pyautogui.PAUSE = 1
+    levelType = int(input_out)
+    print("请手动激活窗口（5秒内）")
+    time.sleep(5)
     print("start task....")
     Fuben().fuben(1)
     print("end task(fuben)....start task(ghost)")
-    Ghost().ghostNew()
+    Ghost().ghostNew(1)
+    Baotu().baotu()
+    Yabiao().yabiao()
+    Mijing().mijing(levelType)
+

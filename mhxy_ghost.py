@@ -193,11 +193,7 @@ class Ghost:
                             posBigMap[1])
         # 选择长安城
         # 点击长安城
-        collect = pyautogui.locateCenterOnScreen(r'resources/common/chang_an_cheng.png',  # collect_caiji
-                                                 region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                 confidence=0.9)
-        if collect is not None:
-            pyautogui.leftClick(collect.x, collect.y)
+        Util.leftClick(13.4, 12.4)
 
         cooldown(0.5)
         # 打开小地图
@@ -216,27 +212,10 @@ class Ghost:
 
     # 一键喊话（帮派，当前频道）
     def yijianhanhua(self):
-        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
-                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                  confidence=0.9)
-        if position is not None:
-            pyautogui.leftClick(position.x, position.y)
-            position = pyautogui.locateCenterOnScreen(r'resources/ghost/bangpai_channel.png',  # collect_caiji
-                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                      confidence=0.9)
-            if position is not None:
-                pyautogui.leftClick(position.x, position.y)
-
-        position = pyautogui.locateCenterOnScreen(r'resources/ghost/han_hua.png',  # collect_caiji
-                                                  region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                  confidence=0.9)
-        if position is not None:
-            pyautogui.leftClick(position.x, position.y)
-            position = pyautogui.locateCenterOnScreen(r'resources/ghost/current_channel.png',  # collect_caiji
-                                                      region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                      confidence=0.9)
-            if position is not None:
-                pyautogui.leftClick(position.x, position.y)
+        clickIconPicIfExist(r'resources/ghost/han_hua.png')
+        clickIconPicIfExist(r'resources/ghost/bangpai_channel.png')
+        clickIconPicIfExist(r'resources/ghost/han_hua.png')
+        clickIconPicIfExist(r'resources/ghost/current_channel.png')
         cooldown(23)
 
     # 打开队伍面板，检查是否有离线队友
@@ -244,11 +223,13 @@ class Ghost:
         # 检查是否有离线队友
         lixianCount = 0
         while lixianCount < 4:
+            cooldown(0.5)
             liXian = pyautogui.locateCenterOnScreen(r'resources/ghost/liXian.png',  # collect_caiji
                                                     region=(frame.left, frame.top, frame.right, frame.bottom),
                                                     confidence=0.9)
             if liXian is not None:
                 pyautogui.leftClick(liXian.x, liXian.y)
+                cooldown(0.5)
                 deleteTeam = pyautogui.locateCenterOnScreen(r'resources/ghost/deleteTeam.png',  # collect_caiji
                                                             region=(
                                                                 frame.left, frame.top, frame.right, frame.bottom),
@@ -272,13 +253,12 @@ class Ghost:
             # 如果队伍不足4人，开始喊话
             count = 0
             for teamMate in TEAMMATE_LIST:
-                print(teamMate._pic)
                 position = pyautogui.locateAllOnScreen(teamMate._pic,  # collect_caiji
                                                        region=(frame.left, frame.top, frame.right, frame.bottom),
                                                        confidence=0.9)
                 if position is not None:
                     count += len(list(position))
-            print(count)
+            print('队伍助战数量：', count)
             # 第一次组队可能不会出现助战的情况，做兼容性处理
             team4 = pyautogui.locateCenterOnScreen(r'resources/ghost/team4.png',  # collect_caiji
                                                    region=(frame.left, frame.top, frame.right, frame.bottom),
@@ -317,6 +297,11 @@ class Ghost:
                 clickIconPicIfExist(r'resources/ghost/closeMenu.png')
             else:
                 print('auto_battle2:', auto_battle2)
+                cooldown(0.5)
+                blood = Util.locateCenterOnScreen(r'resources/fuben/' + route + 'blood.png')
+                if blood is not None:
+                    clickIconPicIfExist(r'resources/fuben/' + route + 'task_black.png')
+                cooldown(0.5)
                 startGhost = pyautogui.locateCenterOnScreen(r'resources/ghost/startGhost.png',  # collect_caiji
                                                             region=(frame.left, frame.top, frame.right, frame.bottom),
                                                             confidence=0.9)
@@ -361,8 +346,14 @@ class Ghost:
                         Util.leftClick(-4.4, 4)
                         clickIconPicIfExist(r'resources/ghost/startGhost.png')
 
-    def ghostNew(self):
+    # source:0=无限抓鬼，1=一条龙抓鬼
+    def ghostNew(self, source):
+        t = datetime.datetime.now().timestamp()
         while True:
+            t2 = datetime.datetime.now().timestamp()
+            if source == 1 and t2-t > 60*25:
+                break
+
             # 任务开始前关闭弹窗广告
             closePopupWindow()
 
@@ -401,6 +392,7 @@ class Ghost:
             clickIconPicIfExist(r'resources/ghost/startGhost.png')
 
             self.checkIfFinishTask(60)
+        print("-----抓鬼任务已完成--------")
 
 
 # 小窗口 pyinstaller -F mhxy_ghost.py
@@ -409,6 +401,6 @@ if __name__ == '__main__':
     pyautogui.PAUSE = 1  # 调用在执行动作后暂停的秒数，只能在执行一些pyautogui动作后才能使用，建议用time.sleep
     pyautogui.FAILSAFE = True  # 启用自动防故障功能，左上角的坐标为（0，0），将鼠标移到屏幕的左上角，来抛出failSafeException异常
     try:
-        Ghost(idx=idx).ghostNew()
+        Ghost(idx=idx).ghostNew(0)
     except (FailSafeException):
         pl.playsound('resources/common/music.mp3')
