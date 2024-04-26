@@ -22,13 +22,13 @@ if __name__ == '__main__':
     init()
     time.sleep(3)
     # Util.doubleClick(-4.4, 4)
-    baixiaoxianzi = pyautogui.locateCenterOnScreen(r'resources/taskLink/' + route + 'low_neidan.png',
-                                                   # collect_caiji
-                                                   region=(frame.left, frame.top, frame.right, frame.bottom),
-                                                   confidence=0.9)
-    print(baixiaoxianzi)
+    # baixiaoxianzi = pyautogui.locateCenterOnScreen(r'resources/taskLink/' + route + 'low_neidan.png',
+    #                                                # collect_caiji
+    #                                                region=(frame.left, frame.top, frame.right, frame.bottom),
+    #                                                confidence=0.9)
+    # print(baixiaoxianzi)
     # pyautogui.leftClick(baixiaoxianzi.x, baixiaoxianzi.y)
-    # Util.leftClick(17.2, -11.6)
+    Util.leftClick(17.5, 12.8)
     # pyautogui.moveTo(840, 883)
     # pyautogui.leftClick(840, 883)
     x, y = pyautogui.position()

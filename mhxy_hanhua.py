@@ -1,17 +1,19 @@
 from mhxy import *
+import random
 
 
 class Hanhua:
     def hanhua(self, content):
         while True:
             # 开始喊话
-            clickIconPicIfExist(r'resources/fuben/hanhua.png')
-            clickIconPicIfExist(r'resources/fuben/currentSelect.png')
-            clickIconPicIfExist(r'resources/fuben/currentUnSelect.png')
+            closePopupWindow()
+            clickIconPicIfExist(r'resources/fuben/' + route + 'hanhua.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'currentSelect.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'currentUnSelect.png')
             Util.write(content)
-            clickIconPicIfExist(r'resources/fuben/agreeButton.png')
-            clickIconPicIfExist(r'resources/fuben/closeDialog.png')
-            cooldown(5)
+            clickIconPicIfExist(r'resources/fuben/' + route + 'agreeButton.png')
+            clickIconPicIfExist(r'resources/fuben/' + route + 'closeDialog.png')
+            cooldown(random.randint(5, 10))
 
     def hanhuaWithText(self):
         cooldown(3)

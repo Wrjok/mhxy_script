@@ -43,7 +43,7 @@ frameSizeCm = [28.1, 21.8]
 _newDayClick = False
 
 # 分辨率路由
-route = ''
+route = '768/'
 
 
 class _Teammate:
@@ -379,18 +379,20 @@ def __avgShoujueNum(n=4):
 # 广告图列表
 NORM_ADVERT_LIST = [
     # “X” 符号
-    r'resources/common/big_delete.png',
-    r'resources/common/delete.png',
-    r'resources/common/red_delete.png',
-    r'resources/ghost/team_delete.png',
-    r'resources/ghost/delete_discount.png',
-    r'resources/ghost/delete_bigmap.png',
-    r'resources/ghost/delete_white.png',
-    r'resources/ghost/delete_reDian.png',
-    r'resources/ghost/delete_remind.png',
+    r'resources/common/' + route + 'big_delete.png',
+    r'resources/common/' + route + 'delete.png',
+    r'resources/common/' + route + 'red_delete.png',
+    r'resources/common/' + route + 'fuli_delete.png',
+    r'resources/common/' + route + 'hotdot.png',
+    r'resources/ghost/' + route + 'team_delete.png',
+    r'resources/ghost/' + route + 'delete_discount.png',
+    r'resources/ghost/' + route + 'delete_bigmap.png',
+    r'resources/ghost/' + route + 'delete_white.png',
+    r'resources/ghost/' + route + 'delete_reDian.png',
+    r'resources/ghost/' + route + 'delete_remind.png',
     # “取消” 符号
-    r'resources/ghost/cancel.png',
-    r'resources/ghost/cancel2.png'
+    r'resources/ghost/' + route + 'cancel.png',
+    r'resources/ghost/' + route + 'cancel2.png'
 ]
 
 
